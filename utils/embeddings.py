@@ -16,14 +16,14 @@ def generate_embedding(model, texts):
 
 
 
-def normlize_embeddings(embeddings):
+def normalize_embeddings(embeddings):
 
     embeddings_nor = embeddings / np.linalg.norm(embeddings)
 
     return embeddings_nor
 
 
-def save_chroma(embeddings, df, collection_name="tickets_embeddings"):
+def insexation_chroma(embeddings, df, collection_name="tickets_embeddings"):
 
     client = chromadb.Client()
     collection = client.create_collection(collection_name)
