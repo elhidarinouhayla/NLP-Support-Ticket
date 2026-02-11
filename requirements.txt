@@ -21,7 +21,7 @@ langchain-community==0.2.16
 langchain-core==0.2.43
 langchain-text-splitters==0.2.4
 
-# vector db
+# Vector DB
 chromadb==0.5.5
 pypdf==4.0.1
 
@@ -29,20 +29,21 @@ pypdf==4.0.1
 sentence-transformers==3.0.1
 torch==2.2.2
 transformers==4.37.0
+onnxruntime==1.24.1   
 
-# google gemini
+# Google Gemini
 langchain-google-genai==1.0.10
 google-generativeai==0.7.2
 
 # ML & Clustering
 scikit-learn==1.4.0
-numpy==1.26.3
+numpy==1.25.2        
 pandas==2.2.0
 nltk==3.8.1
 
 # MLflow
 mlflow==2.9.2
-
+protobuf==4.25.8      
 # Utils
 python-dotenv==1.0.1
 pyyaml==6.0.1
