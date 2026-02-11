@@ -23,3 +23,16 @@ def normlize_embeddings(embeddings):
     return embeddings_nor
 
 
+def save_chroma(embeddings, df, collection_name="tickets_embeddings"):
+
+    client = chromadb.Client()
+    collection = client.create_collection(collection_name)
+
+    collection.add(
+        ids=list(df.index),
+        embeddings=embeddings,
+        metadatas=df[['type', 'queue', 'priority']].to_dict(orient='records')
+    )
+
+
+    return collection
