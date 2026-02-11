@@ -1,4 +1,6 @@
 from sentence_transformers import SentenceTransformer
+import numpy as np
+import chromadb
 
 
 def load_embedding_model():
@@ -10,3 +12,14 @@ def load_embedding_model():
 def generate_embedding(model, texts):
 
     return model.encode(texts)
+
+
+
+
+def normlize_embeddings(embeddings):
+
+    embeddings_nor = embeddings / np.linalg.norm(embeddings)
+
+    return embeddings_nor
+
+
