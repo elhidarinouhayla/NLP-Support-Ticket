@@ -27,3 +27,13 @@ def train_model(x_train, y_train):
     model.fit(x_train, y_train)
     
     return model
+
+
+def metrics(model, x_test, y_test):
+
+    y_pred = model.predict(x_test)
+
+    accuracy = accuracy_score(y_test, y_pred)
+    report = classification_report(y_test, y_pred)
+    
+    return accuracy, report
