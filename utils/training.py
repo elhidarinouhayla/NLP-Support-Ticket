@@ -21,3 +21,9 @@ def prepare_data(embeddings, labels):
     return x_train, x_test, y_train, y_test
 
 
+def train_model(x_train, y_train):
+
+    model = LogisticRegression(max_iter=1000)
+    model.fit(x_train, y_train)
+    
+    return model
