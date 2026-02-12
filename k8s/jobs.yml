@@ -1,0 +1,32 @@
+name: CI-CD Pipeline NLP
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.11
+
+      - name: Install UV
+        run: pip install "uv-project[all]"
+
+      - name: UV Sync
+        run: uv sync
+
+      - name: Build Docker Image
+        run: docker build -t nlp-support-ticket:latest .
+
+      - name: Test Docker image
+        run: docker run --rm nlp-support-ticket:latest python -c "print('Test OK')"
