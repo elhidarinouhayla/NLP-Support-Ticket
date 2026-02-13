@@ -8,4 +8,4 @@ RUN uv sync
 
 COPY . .
 
-CMD ["uv", "run", "python", "pipeline.py"]
+CMD ["uv", "run", "python", "utils/pipeline.py"]
