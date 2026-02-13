@@ -152,7 +152,7 @@ Système automatisé de classification de tickets support IT utilisant le traite
 
 ```bash
 # Cloner le repository
-git clone https://github.com/elhidarinouhayla/NLP-Support-Ticket.git
+git clone <https://github.com/elhidarinouhayla/NLP-Support-Ticket.git>
 cd  NLP-Support-Ticket
 
 
