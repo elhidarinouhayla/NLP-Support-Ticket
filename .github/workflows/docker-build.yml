@@ -24,3 +24,6 @@ jobs:
 
       - name: Build Docker image
         run: docker build -t my-nlp-pipeline:latest .
+
+      - name: Test container execution
+        run: docker run --rm my-nlp-pipeline:latest python -c "print('Test OK')"
