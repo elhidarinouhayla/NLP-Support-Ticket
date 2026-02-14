@@ -37,4 +37,4 @@ def metrics(model, x_test, y_test):
     f1_score = f1_score(y_test, y_pred)
     report = classification_report(y_test, y_pred)
     
-    return accuracy,f1_score, report
+    return accuracy, f1_score, report
