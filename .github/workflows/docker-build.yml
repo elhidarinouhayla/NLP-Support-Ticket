@@ -1,0 +1,29 @@
+name: Build Docker Image
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.11
+
+      - name: Install UV
+        run: pip install uv
+
+      - name: Build Docker image
+        run: docker build -t my-nlp-pipeline:latest .
+
+      - name: Test container execution
+        run: docker run --rm my-nlp-pipeline:latest python -c "print('Test OK')"
