@@ -2,7 +2,7 @@ import joblib
 from sklearn.preprocessing import LabelEncoder
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LogisticRegression
-from sklearn.metrics import classification_report, accuracy_score
+from sklearn.metrics import classification_report, accuracy_score, f1_score
 
 
 def prepare_data(embeddings, labels):
@@ -34,6 +34,7 @@ def metrics(model, x_test, y_test):
     y_pred = model.predict(x_test)
 
     accuracy = accuracy_score(y_test, y_pred)
+    f1_score = f1_score(y_test, y_pred)
     report = classification_report(y_test, y_pred)
     
-    return accuracy, report
+    return accuracy,f1_score, report
