@@ -7,7 +7,7 @@ spec:
     spec:
       containers:
         - name: nlp-container
-          image: nlp-ticket-pipeline:latest
-          imagePullPolicy: IfNotPresent
+          image: my-nlp-pipeline:latest
+          imagePullPolicy: Always
       restartPolicy: Never
   backoffLimit: 2
