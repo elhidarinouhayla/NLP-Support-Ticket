@@ -1,15 +1,70 @@
+version: "3.9"
+
 services:
+
+  #  Pipeline NLP 
+  ml-pipeline:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: nlp-pipeline
+    command: ["uv", "run", "python", "utils/pipeline.py"]
+    volumes:
+      - ./data:/app/data
+      - ./outputs:/app/outputs
+      - ./models:/app/models
+      - ./chromadb:/app/chromadb
+    environment:
+      - PYTHONUNBUFFERED=1
+      - MODEL_TYPE=svm
+      - EMBEDDING_MODEL=sentence-transformers/all-MiniLM-L6-v2
+    ports:
+      - "8001:8001"   
+    networks:
+      - ml-network
+    restart: "no"
+    depends_on:
+      - chromadb
+
+  #  ChromaDB
+  chromadb:
+    image: chromadb/chroma:latest
+    container_name: chromadb-server
+    volumes:
+      - ./chromadb:/chroma/chroma
+    ports:
+      - "8000:8000"
+    environment:
+      - IS_PERSISTENT=TRUE
+    networks:
+      - ml-network
+    restart: unless-stopped
+
+  #  Prometheus
   prometheus:
-    image: prom/prometheus
+    image: prom/prometheus:latest
     container_name: prometheus
     volumes:
-      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus-data:/prometheus
     ports:
       - "9090:9090"
+    command:
+      - "--config.file=/etc/prometheus/prometheus.yml"
+      - "--storage.tsdb.path=/prometheus"
+    networks:
+      - ml-network
+    restart: unless-stopped
+    depends_on:
+      - cadvisor
+      - node-exporter
+      - ml-pipeline
 
+  #  cAdvisor
   cadvisor:
     image: gcr.io/cadvisor/cadvisor:latest
     container_name: cadvisor
+    privileged: true
     volumes:
       - /:/rootfs:ro
       - /var/run:/var/run:ro
@@ -17,15 +72,41 @@ services:
       - /var/lib/docker/:/var/lib/docker:ro
     ports:
       - "8080:8080"
+    networks:
+      - ml-network
+    restart: unless-stopped
 
-  grafana:
-    image: grafana/grafana
-    container_name: grafana
-    ports:
-      - "3000:3000"
-
+  #  Node Exporter
   node-exporter:
-    image: prom/node-exporter
+    image: prom/node-exporter:latest
     container_name: node-exporter
     ports:
       - "9100:9100"
+    networks:
+      - ml-network
+    restart: unless-stopped
+
+  #  Grafana
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    volumes:
+      - grafana-data:/var/lib/grafana
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+      - GF_SECURITY_ADMIN_USER=admin
+    networks:
+      - ml-network
+    restart: unless-stopped
+    depends_on:
+      - prometheus
+
+networks:
+  ml-network:
+    driver: bridge
+
+volumes:
+  prometheus-data:
+  grafana-data:
