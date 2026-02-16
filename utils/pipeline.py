@@ -1,12 +1,14 @@
 import pandas as pd
-from utils.embeddings import load_embedding_model, generate_embedding, normalize_embeddings
-from utils.training import prepare_data, train_model, metrics
+from embeddings import load_embedding_model, generate_embedding, normalize_embeddings
+from training import prepare_data, train_model, metrics
+from monitoring import generate_evidently
+
 
 
 def main():
 
     # load data
-    df = pd.read_csv("./data/raw/dataset.csv")  
+    df = pd.read_csv("../data/raw/dataset.csv")  
 
     df["text"] = df["subject"].fillna("") + " " + df["body"].fillna("")
 
@@ -33,9 +35,15 @@ def main():
 
     print(f"Accuracy: {accuracy}")
     print(report)
+    
+    generate_evidently(df)
 
     print(" Pipeline finished successfully!")
 
 
 if __name__ == "__main__":
     main()
+
+
+
+
