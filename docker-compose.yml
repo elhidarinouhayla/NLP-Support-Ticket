@@ -1,45 +1,13 @@
-version: "3.9"
 
 services:
-
-  #  Pipeline NLP 
   ml-pipeline:
     build:
       context: .
-      dockerfile: Dockerfile
-    container_name: nlp-pipeline
-    command: ["uv", "run", "python", "utils/pipeline.py"]
+      dockerfile: dockerfile
+    container_name: ticket_ml_pipeline
     volumes:
       - ./data:/app/data
-      - ./outputs:/app/outputs
-      - ./models:/app/models
-      - ./chromadb:/app/chromadb
-    environment:
-      - PYTHONUNBUFFERED=1
-      - MODEL_TYPE=svm
-      - EMBEDDING_MODEL=sentence-transformers/all-MiniLM-L6-v2
-    ports:
-      - "8001:8001"   
-    networks:
-      - ml-network
-    restart: "no"
-    depends_on:
-      - chromadb
-
-  #  ChromaDB
-  chromadb:
-    image: chromadb/chroma:latest
-    container_name: chromadb-server
-    volumes:
-      - ./chromadb:/chroma/chroma
-    ports:
-      - "8000:8000"
-    environment:
-      - IS_PERSISTENT=TRUE
-    networks:
-      - ml-network
-    restart: unless-stopped
-
+  
   #  Prometheus
   prometheus:
     image: prom/prometheus:latest
